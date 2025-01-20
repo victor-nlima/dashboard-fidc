@@ -1,0 +1,126 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    background-color:   #002e40;
+}
+main{
+    display: flex;
+    width: 100%;
+    border-radius: 10px;
+    justify-content: center;
+    margin-top: 10px;
+    
+}
+
+#container_conteudo{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: start;
+    min-height: 100vh;
+}
+
+#container_title_index{
+    display: flex;
+    justify-content: flex-start;
+}
+
+/* css para as estatisticas */
+
+.container_graph_statistics{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.graph_statistics{
+    display: flex;
+    flex-direction: column;
+    
+    
+}
+
+.graph_statistics > h5{
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.264)  ;
+    padding: 10px;
+    margin: 10px;
+    
+}
+
+.card{
+    min-width: 180px;
+    max-height: 120px;
+    margin: 10px;
+    background-color:  #002e40;
+    border: 1px solid  rgba(255, 255, 255, 0.264);
+}
+
+/* responsividade para tela de dashboards_frame */
+
+@media (max-width: 1020px){
+    main{
+        padding: 25px !important;
+    }
+    .container_statistics{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .card{
+        min-width: 350px;
+        text-align: center ;
+        padding: 20px;
+    }
+
+    .container_graph_statistics{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .response{
+        display: flex !important;
+        flex-direction: row !important ;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+}
+
+/* css para  dashboards_statistics */
+
+
+.container_flow{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container_flow_canvas{
+    margin-top: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.container_flow_canvas > h5{
+    color: white;
+    text-transform: capitalize;
+}
+
+#fluxo_caixa{
+    width: 100%;
+    height: auto;
+}

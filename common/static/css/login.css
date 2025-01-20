@@ -1,0 +1,40 @@
+
+#container{
+    height: 100vh;
+    background-image: url('../img/maud_color.svg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #212529;
+}
+
+#login_main{
+    background-color: white;
+    box-shadow: 5px 5px 5px #000;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    margin: 15px;
+}
+
+#container_img_login{
+    max-width: 350px;
+    max-height: 250px;
+}
+
+#imagem_login{
+    width: 100%;
+}
+
+#container_btn_login{
+    margin: 10px 0px;
+    display: flex;
+    justify-content: flex-end;
+}
+

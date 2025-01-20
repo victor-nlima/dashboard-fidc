@@ -1,0 +1,49 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.swp
+
+# Django
+*.log
+*.pot
+*.pyc
+*.so
+.DS_Store
+local_settings.py
+media/
+staticfiles/
+*.sqlite3
+*/migrations/
+
+# Virtual Environment
+.env
+env/
+venv/
+.venv/
+
+# IDEs and Editors
+.idea/
+*.iml
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# System Files
+Thumbs.db
+.DS_Store
+*.bak
+
+# Testing
+.coverage
+.tox/
+.pytest_cache/
+
+# Migrations
+migrations/**/000*.py
+
+# MyPy
+.mypy_cache/
+
+dump.rdb

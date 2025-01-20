@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}Dashboard{% endblock %}
+{% block conteudo %}
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="row  justify-content-evenly container_statistics">
+      {% for data in data_frame %}
+      <div class="col-auto">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-text" style="color: #c39b56">{{ data.title }}</h5>
+            <h2 class="card-title" style="color: #e3e3e3">{{ data.value }}</h2>
+            {% if data.info == "Enquadrado" %}
+              <h6 class="card-text fst-italic" style="color: #3e9611"><i class="bi bi-check"></i>{{ data.info }}
+              </h6>
+            {% else %}
+              <h6 class="card-text fst-italic" style="color: #D1540A"><i class="bi bi-x"></i>{{ data.info }}</h6>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="container_graph_statistics mt-4">
+      <div class="graph_statistics col-7">
+        <h5 class="fw-light">Concentração devedor comum</h5>
+        <div class="d-flex justify-content-evenly">
+          {% for data in rank_common_debtor %}
+            <div class="col-auto">
+              <div class="card" style="min-width: 150px;background-color: #002e40">
+                <div class="card-body">
+                  <h6 class="card-text" style="color: #c39b56">{{ data.title }}</h6>
+                  <h3 class="card-title" style="color: #e3e3e3">{{ data.value }}</h3>
+                {% if data.info ==  "Enquadrado"  %}
+                  <h6 class="card-text fst-italic" style="color: #3e9611"><i class="bi bi-check"></i>{{ data.info }}</h6>
+                {% else %}
+                  <h6 class="card-text fst-italic" style="color: #D1540A"><i class="bi bi-x"></i>{{ data.info }}</h6>
+                {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="row my-3 mx-4  justify-content-evenly">
+          <div id="main" style="min-height:400px;"></div>
+        </div>
+      </div>
+      <div class="graph_statistics col-5">
+        <h5 class="fw-light">Concentração devedor especial</h5>
+        <div class="row response justify-content-evenly">
+          {% for data in rank_special_debtor %}
+            <div class="col-auto">
+              <div class="card" style="min-width: 150px;background-color: #002e40">
+                <div class="card-body">
+                  <h6 class="card-text" style="color: #c39b56">{{ data.title }}</h6>
+                  <h3 class="card-title" style="color: #e3e3e3">{{ data.value }}</h3>
+                {% if data.info ==  "Enquadrado"  %}
+                  <h6 class="card-text fst-italic" style="color: #3e9611"><i class="bi bi-check"></i>{{ data.info }}</h6>
+                {% else %}
+                  <h6 class="card-text fst-italic" style="color: #D1540A"><i class="bi bi-x"></i>{{ data.info }}</h6>
+                {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="row my-3 mx-4 justify-content-evenly">
+          <div id="main2" style="min-height:400px; width: 100%;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{{ common_debtor|json_script:"common_debtor" }}
+{{ special_debtor|json_script:"special_debtor" }}
+
+<script src="{% static 'js/frame.js' %}"></script>
+
+<!-- Exemplo de como passar as variaveis que veeem pela views para o javascript externo  -->
+<!-- o arquivo javascript externo está importado na base.html -->
+
+
+<!-- algumas estilizacoes foram feitas nos arquivos css externo -->
+
+{% endblock %}
