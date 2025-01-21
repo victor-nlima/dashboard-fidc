@@ -8,6 +8,7 @@ __pycache__/
 # Django
 *.log
 *.pot
+ex
 *.pyc
 *.so
 .DS_Store
