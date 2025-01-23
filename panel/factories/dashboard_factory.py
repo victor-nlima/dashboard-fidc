@@ -6,8 +6,12 @@ class DashboardFactory:
         # self.session = next(get_db())
         self.dashboardRepository = DashboardRepository()
 
-    def execute_get_dashboard(self, dashboard_id: int):
+    def execute_get_dashboard_data(self,type):
         dashboardService = DashboardService(self.dashboardRepository)
-        response = dashboardService.get_dashboard(dashboard_id)
+        response = dashboardService.get_dashboard_date(type)
         return response
 
+    def execute_create_data(self,data):
+        dashboardService = DashboardService(self.dashboardRepository)
+        response = dashboardService.create_dashboard(data)
+        return response

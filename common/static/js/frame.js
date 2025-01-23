@@ -8,11 +8,14 @@ let myChart = echarts.init(document.getElementById('main'), 'dark', {
 });
 
 let common_debtor = document.getElementById('common_debtor').textContent
+let common_debtor_transform = document.getElementById('common_debtor_transform').textContent
 let special_debtor = document.getElementById('special_debtor').textContent
+let special_debtor_transform = document.getElementById('special_debtor_transform').textContent
 
 common_debtor = JSON.parse(common_debtor)
-
-special_debtor =  JSON.parse(special_debtor)
+common_debtor_transform = JSON.parse(common_debtor_transform)
+special_debtor = JSON.parse(special_debtor)
+special_debtor_transform =  JSON.parse(special_debtor_transform)
 
 let option;
 
@@ -79,7 +82,7 @@ option = {
         color: '#e3e3e3'
       },
 
-      data: special_debtor
+      data: common_debtor_transform
     }
   ]
 };
@@ -146,7 +149,7 @@ option2 = {
           color: 'transparent'
         }
       },
-      data: [0, 3.57, 5.62, 7.3, 8.88, 0]
+      data: special_debtor
     },
     {
       name: 'Valor à Receber',
@@ -159,18 +162,7 @@ option2 = {
       itemStyle: {
         color: '#e3e3e3'
       },
-
-      data: [{
-        value: 3.57,
-        itemStyle: {
-          color: '#c39b56'
-        }
-      }, 2.05, 1.68, 1.58, 0, {
-        value: 8.88,
-        itemStyle: {
-          color: '#c39b56'
-        }
-      }]
+      data: special_debtor_transform
     }
   ]
 };

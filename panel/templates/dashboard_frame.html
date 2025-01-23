@@ -77,7 +77,9 @@
 </div>
 
 {{ common_debtor|json_script:"common_debtor" }}
+{{ common_debtor_transform|json_script:"common_debtor_transform" }}
 {{ special_debtor|json_script:"special_debtor" }}
+{{ special_debtor_transform|json_script:"special_debtor_transform" }}
 
 <script src="{% static 'js/frame.js' %}"></script>
 
