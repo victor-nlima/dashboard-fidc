@@ -25,6 +25,7 @@ def dashboard_frame(request):
         info = dashboard_data.info
     except Exception as e:
         message = {'success':False,"message":'Nenhum dado encontrado'}
+        info = None
     
     data_frame = [frame for frame in info['data_frame']] if info else None
     rank_common_debtor = [rank for rank in info['rank_common_debtor']] if info else None
@@ -67,6 +68,7 @@ def dashboard_statistics(request):
         info = dashboard_data.info
     except Exception as e:
         message = {'success':False,"message":'Nenhum dado encontrado'}
+        info = None
 
     data_statistics = [ds for ds in info['data_statistics']] if info else None
     current_box = [cb for cb in info['current_box']] if info else None
