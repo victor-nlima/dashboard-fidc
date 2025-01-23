@@ -19,20 +19,24 @@ def dashboard_frame(request):
     message = None
 
     factory = DashboardFactory()
-    dashboard_data = factory.execute_get_dashboard_data(type='framing')
-    info = dashboard_data.info
     
-    data_frame = [frame for frame in info['data_frame']]
-    rank_common_debtor = [rank for rank in info['rank_common_debtor']]
-    rank_special_debtor = [rank for rank in info['rank_special_debtor']]
-    common_debtor = [cn for cn in info['common_debtor']]
-    common_debtor_transform = [cdt for cdt in info['common_debtor_transform']]
-    special_debtor = [sd for sd in info['special_debtor']]
-    special_debtor_transform = [sdt for sdt in info['special_debtor_transform']]
-    data_statistics = [ds for ds in info['data_statistics']]     
-    current_box = [cb for cb in info['current_box']]
-    cumulative_expected_flow = [cef for cef in info['cumulative_expected_flow']]
-    user_id = info['user_id']
+    try:
+        dashboard_data = factory.execute_get_dashboard_data(type='framing')
+        info = dashboard_data.info
+    except Exception as e:
+        message = {'success':False,"message":'Nenhum dado encontrado'}
+    
+    data_frame = [frame for frame in info['data_frame']] if info else None
+    rank_common_debtor = [rank for rank in info['rank_common_debtor']] if info else None
+    rank_special_debtor = [rank for rank in info['rank_special_debtor']] if info else None
+    common_debtor = [cn for cn in info['common_debtor']] if info else None
+    common_debtor_transform = [cdt for cdt in info['common_debtor_transform']] if info else None
+    special_debtor = [sd for sd in info['special_debtor']] if info else None
+    special_debtor_transform = [sdt for sdt in info['special_debtor_transform']] if info else None
+    data_statistics = [ds for ds in info['data_statistics']] if info else None 
+    current_box = [cb for cb in info['current_box']] if info else None
+    cumulative_expected_flow = [cef for cef in info['cumulative_expected_flow']] if info else None
+    user_id = info['user_id'] if info else None
     
 
     return render(request,'dashboard_frame.html',{
@@ -58,12 +62,15 @@ def dashboard_statistics(request):
 
     factory = DashboardFactory()
 
-    dashboard_data = factory.execute_get_dashboard_data(type='statistics')
+    try:
+        dashboard_data = factory.execute_get_dashboard_data(type='statistics')
+        info = dashboard_data.info
+    except Exception as e:
+        message = {'success':False,"message":'Nenhum dado encontrado'}
 
-    info = dashboard_data.info
-    data_statistics = [ds for ds in info['data_statistics']]
-    current_box = [cb for cb in info['current_box']]
-    cumulative_expected_flow = [cef for cef in info['cumulative_expected_flow']]
+    data_statistics = [ds for ds in info['data_statistics']] if info else None
+    current_box = [cb for cb in info['current_box']] if info else None
+    cumulative_expected_flow = [cef for cef in info['cumulative_expected_flow']] if info else None
 
     return render(request,'dashboard_statistics.html',{
         'message':message,
