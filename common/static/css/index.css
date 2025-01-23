@@ -10,7 +10,6 @@ main{
     width: 100%;
     border-radius: 10px;
     justify-content: center;
-    margin-top: 10px;
     flex-direction: column;
     
 }
@@ -63,9 +62,7 @@ main{
 /* responsividade para tela de dashboards_frame */
 
 @media (max-width: 1020px){
-    main{
-        padding: 25px !important;
-    }
+    
     .container_statistics{
         display: flex;
         flex-direction: column;
