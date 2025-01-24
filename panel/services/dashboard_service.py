@@ -2,16 +2,15 @@ from panel.dto.dashboard_dto import DashboardDTO
 from panel.dto.return_default_dto import ReturnDefault
 from typing import Optional
 from panel.repositories.dashboard_repository.abstract_dashboard_repository import AbstractDashboardRepository
-from panel.validator.validator_data_info_frame import ValidatorDataInfoFrame
-from panel.validator.validator_data_info_statistics import ValidatorDataInfoStatistics
+from panel.validator.validator_data_info import ValidatorDataInfo
 
 class DashboardService:
     def __init__(self, dashboardRepository: AbstractDashboardRepository):
         self.dashboardRepository = dashboardRepository
 
-    def get_dashboard_date(self,type) -> Optional[DashboardDTO]:
+    def get_dashboard_date(self) -> Optional[DashboardDTO]:
         
-        dash = self.dashboardRepository.get_date(type)
+        dash = self.dashboardRepository.get_date()
 
         if not dash:
             print('Dados do dashboard não enconotrados.')
@@ -20,41 +19,28 @@ class DashboardService:
         return dash
     
     def create_dashboard(self,data):
-        type =  data.get('type')
-        if type == 'statistics':
-            info={
-                "user_id":data.get('user_id'),
-                "type": data.get('type'),
-                "data_statistics": data.get("data_statistics"),
-                "current_box": data.get("current_box"),
-                "cumulative_expected_flow": data.get("cumulative_expected_flow"),
-            }
-        
-        else:
-            info={
-                "user_id":data.get('user_id'),
-                "type": data.get('type'),
-                "data_frame" : data.get('data_frame'),
-                "rank_common_debtor" : data.get('rank_common_debtor'),
-                "rank_special_debtor" : data.get('rank_special_debtor'),
-                "common_debtor" : data.get('common_debtor'),
-                "common_debtor_transform" : data.get('common_debtor_transform'),
-                "special_debtor" : data.get('special_debtor'),
-                "special_debtor_transform" : data.get('special_debtor_transform'),
-                "data_statistics" : data.get('data_statistics'),
-                "current_box" : data.get('current_box'),
-                "cumulative_expected_flow" : data.get('cumulative_expected_flow')
-            }
+            
+        info={
+            "user_id":data.get('user_id'),
+            "data_frame" : data.get('data_frame'),
+            "rank_common_debtor" : data.get('rank_common_debtor'),
+            "rank_special_debtor" : data.get('rank_special_debtor'),
+            "common_debtor" : data.get('common_debtor'),
+            "common_debtor_transform" : data.get('common_debtor_transform'),
+            "special_debtor" : data.get('special_debtor'),
+            "special_debtor_transform" : data.get('special_debtor_transform'),
+            "data_statistics" : data.get('data_statistics'),
+            "current_box" : data.get('current_box'),
+            "cumulative_expected_flow" : data.get('cumulative_expected_flow'),
+            "data_statistics": data.get("data_statistics"),
+            "current_box": data.get("current_box"),
+            "cumulative_expected_flow": data.get("cumulative_expected_flow"),
+        }
 
-        print(info)
-        
-        if info['type'] == 'statistics':
-            validator = ValidatorDataInfoStatistics()
-            verify = validator.validate_statistics(info)
-        else:
-            print('dentro do frame')
-            validator = ValidatorDataInfoFrame()
-            verify = validator.validate_frame(info)            
+       
+        validator = ValidatorDataInfo()
+        verify = validator.validate(info)
+                 
 
         if verify.get('error'):
             return_default = ReturnDefault(success=False,message=verify)

@@ -19,9 +19,8 @@ def dashboard_frame(request):
     message = None
 
     factory = DashboardFactory()
-    
     try:
-        dashboard_data = factory.execute_get_dashboard_data(type='framing')
+        dashboard_data = factory.execute_get_dashboard_data()
         info = dashboard_data.info
     except Exception as e:
         message = {'success':False,"message":'Nenhum dado encontrado'}
@@ -64,7 +63,7 @@ def dashboard_statistics(request):
     factory = DashboardFactory()
 
     try:
-        dashboard_data = factory.execute_get_dashboard_data(type='statistics')
+        dashboard_data = factory.execute_get_dashboard_data()
         info = dashboard_data.info
     except Exception as e:
         message = {'success':False,"message":'Nenhum dado encontrado'}
@@ -98,7 +97,7 @@ def created_data(request):
             response_data = factory.execute_create_data(data=data_json)
         except Exception as e:
 
-            return JsonResponse({"message": f"Houve algum erro na requisicao: {str(e)}"},status=400)
+            return JsonResponse({"message": f"Houve algum erro na requisicao: {str(e.__str__)}"},status=400)
         
         
         return JsonResponse(response_data)
