@@ -53,7 +53,6 @@ main{
 
 .card{
     min-width: 180px;
-    max-height: 120px;
     margin: 10px;
     background-color:  #002e40;
     border: 1px solid  rgba(255, 255, 255, 0.264);
@@ -72,7 +71,7 @@ main{
     }
 
     .card{
-        min-width: 350px;
+        width: 100%;
         text-align: center ;
         padding: 20px;
     }
@@ -90,6 +89,33 @@ main{
         align-items: center;
         justify-content: center;
         padding: 20px;
+    }
+
+    .justify-content-evenly{
+        flex-direction: column !important;
+    }
+
+    .container_statistics{
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .row{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .col-auto{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .graph_statistics{
+        min-width: 300px;
     }
 
 }
