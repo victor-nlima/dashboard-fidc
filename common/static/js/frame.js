@@ -71,7 +71,7 @@ option = {
       data: common_debtor
     },
     {
-      name: 'Valor à Receber',
+      name: 'Percentual Acumulado',
       type: 'bar',
       stack: 'Total',
       label: {
@@ -152,7 +152,7 @@ option2 = {
       data: special_debtor
     },
     {
-      name: 'Valor à Receber',
+      name: 'Percentual Acumulado',
       type: 'bar',
       stack: 'Total',
       label: {
