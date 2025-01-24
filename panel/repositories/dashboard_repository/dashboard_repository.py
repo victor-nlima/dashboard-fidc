@@ -9,7 +9,6 @@ class DashboardRepository(AbstractDashboardRepository):
         return DashboardDTO(
             id = dashboard.id,
             creation_date = dashboard.creation_date,
-            user = dashboard.user_id,
             info = dashboard.info
         )
 
@@ -25,7 +24,6 @@ class DashboardRepository(AbstractDashboardRepository):
         try:
             
             dataDashboard = DataDashboard(
-                user_id = data['user_id'],
                 info = data
             )
             

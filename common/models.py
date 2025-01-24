@@ -13,7 +13,6 @@ class DataDashboard(models.Model):
 
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     creation_date = models.DateTimeField(auto_now=True)
-    user =  models.ForeignKey(User,on_delete=models.DO_NOTHING,related_name='entidades')
     info =models.JSONField()
 
     def __str__(self):

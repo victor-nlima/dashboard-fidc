@@ -29,15 +29,30 @@ def dashboard_frame(request):
     data_frame = [frame for frame in info['data_frame']] if info else None
     rank_common_debtor = [rank for rank in info['rank_common_debtor']] if info else None
     rank_special_debtor = [rank for rank in info['rank_special_debtor']] if info else None
-    common_debtor = [cn for cn in info['common_debtor']] if info else None
+    common_debtor = [round(cn,2) for cn in info['common_debtor']] if info else None
     common_debtor_transform = [cdt for cdt in info['common_debtor_transform']] if info else None
     special_debtor = [sd for sd in info['special_debtor']] if info else None
     special_debtor_transform = [sdt for sdt in info['special_debtor_transform']] if info else None
     data_statistics = [ds for ds in info['data_statistics']] if info else None 
     current_box = [cb for cb in info['current_box']] if info else None
     cumulative_expected_flow = [cef for cef in info['cumulative_expected_flow']] if info else None
-    user_id = info['user_id'] if info else None
     
+    def transform_data(list):
+        for i,debtor in enumerate(list):
+            if isinstance(debtor, dict):
+                debtor['value'] = round(debtor['value'],2)
+            else:
+                list[i] = round(debtor, 2)
+                print(debtor)
+
+    if common_debtor_transform:
+        transform_data(common_debtor_transform)
+    
+    if special_debtor_transform:
+        transform_data(special_debtor_transform)
+
+
+    print(special_debtor_transform)
 
     return render(request,'dashboard_frame.html',{
         'message':message,
@@ -51,8 +66,7 @@ def dashboard_frame(request):
         'data_statistics':data_statistics,
         'current_box':current_box,
         'cumulative_expected_flow':cumulative_expected_flow,
-        'user_id':user_id
-    })
+})
 
 
 @login_required(login_url='login')

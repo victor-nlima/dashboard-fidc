@@ -21,7 +21,6 @@ class DashboardService:
     def create_dashboard(self,data):
             
         info={
-            "user_id":data.get('user_id'),
             "data_frame" : data.get('data_frame'),
             "rank_common_debtor" : data.get('rank_common_debtor'),
             "rank_special_debtor" : data.get('rank_special_debtor'),

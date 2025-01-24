@@ -4,7 +4,6 @@ class ValidatorDataInfo:
     def __init__(self):
 
         self.data_info= {
-            'user_id':{'type':'integer','required':True},
             'data_statistics':{'type':'list','required':True},
             "current_box":{'type':'list','required':True},
             "cumulative_expected_flow":{'type':'list','required':True},
