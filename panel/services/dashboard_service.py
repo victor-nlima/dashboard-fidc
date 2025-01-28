@@ -36,7 +36,9 @@ class DashboardService:
             "cumulative_expected_flow": data.get("cumulative_expected_flow"),
         }
 
-       
+        print('=====================================\n')
+        print('antes de validar ')
+        print('=====================================\n')
         validator = ValidatorDataInfo()
         verify = validator.validate(info)
                  

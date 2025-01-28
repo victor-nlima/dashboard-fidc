@@ -17,7 +17,7 @@ class DashboardRepository(AbstractDashboardRepository):
     #     return self._to_dto(dash) if dash else None
 
     def get_date(self):
-        dash = DataDashboard.objects.order_by('-creation_date').first()
+        dash = DataDashboard.objects.all().order_by('-creation_date').first()
         return self._to_dto(dash) if dash else None
 
     def create_data(self,data) -> bool:
@@ -26,6 +26,8 @@ class DashboardRepository(AbstractDashboardRepository):
             dataDashboard = DataDashboard(
                 info = data
             )
+
+            print('antes de salvar',dataDashboard)
             
             dataDashboard.save()
             return True
