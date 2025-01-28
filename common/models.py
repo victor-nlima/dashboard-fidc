@@ -16,4 +16,4 @@ class DataDashboard(models.Model):
     info =models.JSONField()
 
     def __str__(self):
-        return f"{self.user_id} - {self.creation_date}"
+        return f"{self.creation_date}"
