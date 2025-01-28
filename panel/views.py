@@ -98,6 +98,7 @@ def dashboard_statistics(request):
 @validate_token
 def created_data(request):
     if request.method == "POST":
+        print('chegou o post.......')
         try:
             payload = json.loads(request.body)
             data_encrypted = str(payload['data'])
@@ -108,6 +109,7 @@ def created_data(request):
             data_decrypted = fernet.decrypt(data_encrypted)
             data_json = json.loads(data_decrypted.decode('utf-8'))
             factory = DashboardFactory()
+            print('dentro da views.................\n')
             response_data = factory.execute_create_data(data=data_json)
         except Exception as e:
 

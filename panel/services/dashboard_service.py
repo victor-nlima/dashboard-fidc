@@ -19,7 +19,11 @@ class DashboardService:
         return dash
     
     def create_dashboard(self,data):
-            
+        
+        print('=================================================\n')
+        print('entrando na funcao de criacao....................\n')
+        print('=================================================\n')
+
         info={
             "data_frame" : data.get('data_frame'),
             "rank_common_debtor" : data.get('rank_common_debtor'),
@@ -39,6 +43,7 @@ class DashboardService:
         print('=====================================\n')
         print('antes de validar ')
         print('=====================================\n')
+        
         validator = ValidatorDataInfo()
         verify = validator.validate(info)
                  
