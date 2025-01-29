@@ -71,7 +71,7 @@ option = {
       data: common_debtor
     },
     {
-      name: 'Percentual Acumulado',
+      name: 'Percentual',
       type: 'bar',
       stack: 'Total',
       label: {
