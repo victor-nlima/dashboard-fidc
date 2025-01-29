@@ -13,8 +13,6 @@ current_box = JSON.parse(current_box)
 cumulative_expected_flow =  JSON.parse(cumulative_expected_flow)
 
 
-console.log('teste',cumulative_expected_flow)
-
 let fluxoCaixaOption;
 
 fluxoCaixaOption = {
@@ -32,6 +30,7 @@ tooltip: {
     formatter: function (params) {
         // "params" é um array com as informações de cada série na categoria
         let categoryName = params[0].name;
+        
         let sum = params.reduce(function (acc, cur) {
             return acc + cur.value;
         }, 0);
@@ -57,7 +56,7 @@ grid: {
 },
 xAxis: {
     type: 'category',
-    splitLine: {show: false},
+    splitLine: {show: true},
     data: ['D+0', 'D+1', 'D+2', 'D+3', 'D+4', 'D+5', 'D+6', 'D+7']
 },
 yAxis: {
@@ -116,6 +115,6 @@ series: [
 
 // Display the chart using the configuration items and data just specified.
 fluxoCaixaChart.setOption(fluxoCaixaOption);
-window.addEventListener('DOMContentLoaded', function () {
-    fluxoCaixaChart();
+window.addEventListener('resize', function () {
+    fluxoCaixaChart.resize();
 });

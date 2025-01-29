@@ -152,7 +152,7 @@ option2 = {
       data: special_debtor
     },
     {
-      name: 'Percentual Acumulado',
+      name: 'Percentual',
       type: 'bar',
       stack: 'Total',
       label: {

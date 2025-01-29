@@ -137,6 +137,7 @@ main{
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
+    width: 600px;
 }
 
 .container_flow_canvas > h5{
@@ -144,7 +145,19 @@ main{
     text-transform: capitalize;
 }
 
-#fluxo_caixa{
-    width: 100%;
-    height: auto;
+
+@media (max-width: 900px){
+
+    .container_flow_canvas{
+        width: 400 !important;
+        height: 300 !important;
+    }
+    
+    .justify-content-evenly{
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
 }
