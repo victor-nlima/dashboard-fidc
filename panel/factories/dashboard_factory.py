@@ -15,3 +15,8 @@ class DashboardFactory:
         dashboardService = DashboardService(self.dashboardRepository)
         response = dashboardService.create_dashboard(data)
         return response
+    
+    def delete_last_data(self):
+        dashboardService = DashboardService(self.dashboardRepository)
+        response = dashboardService.delete_last_data()
+        return response

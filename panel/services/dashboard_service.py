@@ -3,6 +3,7 @@ from panel.dto.return_default_dto import ReturnDefault
 from typing import Optional
 from panel.repositories.dashboard_repository.abstract_dashboard_repository import AbstractDashboardRepository
 from panel.validator.validator_data_info import ValidatorDataInfo
+from datetime import datetime
 
 class DashboardService:
     def __init__(self, dashboardRepository: AbstractDashboardRepository):
@@ -20,9 +21,7 @@ class DashboardService:
     
     def create_dashboard(self,data):
         
-        print('=================================================\n')
-        print('entrando na funcao de criacao....................\n')
-        print('=================================================\n')
+        
 
         info={
             "data_frame" : data.get('data_frame'),
@@ -40,9 +39,6 @@ class DashboardService:
             "cumulative_expected_flow": data.get("cumulative_expected_flow"),
         }
 
-        print('=====================================\n')
-        print('antes de validar ')
-        print('=====================================\n')
         
         validator = ValidatorDataInfo()
         verify = validator.validate(info)
@@ -58,3 +54,18 @@ class DashboardService:
         else:
             return_default = ReturnDefault(success=False,message='Error registering with the bank')
             return return_default.to_dict()
+    
+    def delete_last_data(self):
+        
+        message = self.dashboardRepository.delete_last_date()
+        if message:
+            data = message.strftime('%d/%m/%y')
+            message_return = {'message': 'data successfully deleted!','data':f'date of the data that was deleted: {data}'}
+            return_default = ReturnDefault(success=True, message=message_return)
+            return return_default.to_dict()
+        else:
+            return_default = ReturnDefault(success=False, message='Error when deleting data.')
+            return return_default
+
+
+

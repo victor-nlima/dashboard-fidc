@@ -98,7 +98,6 @@ def dashboard_statistics(request):
 @validate_token
 def created_data(request):
     if request.method == "POST":
-        print('chegou o post.......')
         try:
             payload = json.loads(request.body)
             data_encrypted = str(payload['data'])
@@ -109,7 +108,6 @@ def created_data(request):
             data_decrypted = fernet.decrypt(data_encrypted)
             data_json = json.loads(data_decrypted.decode('utf-8'))
             factory = DashboardFactory()
-            print('dentro da views.................\n')
             response_data = factory.execute_create_data(data=data_json)
         except Exception as e:
 
@@ -117,3 +115,21 @@ def created_data(request):
         
         
         return JsonResponse(response_data)
+
+@csrf_exempt
+@validate_token
+def delete_last_data(request):
+    if request.method == "POST":
+        try:
+            factory = DashboardFactory()
+            response_data = factory.delete_last_data()
+            if not response_data:
+                return JsonResponse({"message": f"{response_data['message']}"},status=404)
+            
+            return JsonResponse({"message": f"{response_data['message']}"},status=200)
+
+        except Exception as e:
+
+            return JsonResponse({"message": f"Houve algum erro na requisicao: {str(e)}"},status=400)
+        
+        

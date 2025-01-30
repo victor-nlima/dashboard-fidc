@@ -1,7 +1,7 @@
 from typing import List, Optional
 from panel.dto.dashboard_dto import DashboardDTO
 from .abstract_dashboard_repository import AbstractDashboardRepository
-from common.models import DataDashboard # importacao do models
+from common.models import DataDashboard 
 from django.contrib.auth.models import User
 
 class DashboardRepository(AbstractDashboardRepository):
@@ -27,11 +27,22 @@ class DashboardRepository(AbstractDashboardRepository):
                 info = data
             )
 
-            print('antes de salvar',dataDashboard)
+            
             
             dataDashboard.save()
             return True
         
         except Exception as e:
             print(f'Erro ao salvar: {e}')
+            return False
+    
+    def delete_last_date(self):
+        try:
+            last_date = DataDashboard.objects.all().order_by('-creation_date').first()
+            date_remove = last_date.creation_date
+            last_date.delete()
+
+            return date_remove
+
+        except Exception as e:
             return False

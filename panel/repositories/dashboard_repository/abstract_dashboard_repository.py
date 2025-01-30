@@ -19,3 +19,7 @@ class AbstractDashboardRepository(ABC):
     @abstractmethod
     def create_data(self,data):
         pass
+
+    @abstractmethod
+    def delete_last_date(self):
+        pass
