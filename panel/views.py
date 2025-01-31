@@ -36,6 +36,7 @@ def dashboard_frame(request):
     data_statistics = [ds for ds in info['data_statistics']] if info else None 
     current_box = [cb for cb in info['current_box']] if info else None
     cumulative_expected_flow = [cef for cef in info['cumulative_expected_flow']] if info else None
+    buyback = [bb for bb in info['buyback']] if info.get('buyback') else None
     
     def transform_data(list):
         for i,debtor in enumerate(list):
@@ -43,16 +44,28 @@ def dashboard_frame(request):
                 debtor['value'] = round(debtor['value'],2)
             else:
                 list[i] = round(debtor, 2)
-                print(debtor)
+
 
     if common_debtor_transform:
         transform_data(common_debtor_transform)
     
     if special_debtor_transform:
         transform_data(special_debtor_transform)
-
-
-    print(special_debtor_transform)
+    
+    if buyback:
+        sm_money = 0
+        sm_percentual = 0
+        for bb in  buyback:
+            sm_money = sm_money + bb['money']
+            sm_percentual = sm_percentual + bb['percentual']
+        
+        buyback.append(
+            {
+                'reason':'Total',
+                'money':sm_money,
+                'percentual': sm_percentual 	
+            }
+        )
 
     return render(request,'dashboard_frame.html',{
         'message':message,
@@ -66,6 +79,7 @@ def dashboard_frame(request):
         'data_statistics':data_statistics,
         'current_box':current_box,
         'cumulative_expected_flow':cumulative_expected_flow,
+        'buyback': buyback
 })
 
 

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_filters %}
 
 {% block titulo %}Dashboard{% endblock %}
 {% block conteudo %}
@@ -8,19 +9,68 @@
     <div class="row  justify-content-evenly container_statistics">
       {% for data in data_frame %}
       <div class="col-auto">
-        <div class="card">
+        {% if data.title != "Recompra" %}
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-text" style="color: #c39b56">{{ data.title }}</h5>
+              <h2 class="card-title" style="color: #e3e3e3">{{ data.value }}</h2>
+              {% if data.info == "Enquadrado" %}
+              <h6 class="card-text fst-italic" style="color: #3e9611"><i class="bi bi-check"></i>{{ data.info }}
+              </h6>
+              {% else %}
+              <h6 class="card-text fst-italic" style="color: #D1540A"><i class="bi bi-x"></i>{{ data.info }}</h6>
+              {% endif %}
+            </div>
+          </div>
+        {% else %}
+        <div class="card card-hover-effect" data-bs-toggle="modal" data-bs-target="#recompraModal">
           <div class="card-body">
             <h5 class="card-text" style="color: #c39b56">{{ data.title }}</h5>
             <h2 class="card-title" style="color: #e3e3e3">{{ data.value }}</h2>
             {% if data.info == "Enquadrado" %}
-              <h6 class="card-text fst-italic" style="color: #3e9611"><i class="bi bi-check"></i>{{ data.info }}
-              </h6>
+            <h6 class="card-text fst-italic" style="color: #3e9611"><i class="bi bi-check"></i>{{ data.info }}
+              <i class="bi bi-hand-index-thumb"></i>
+            </h6>
             {% else %}
-              <h6 class="card-text fst-italic" style="color: #D1540A"><i class="bi bi-x"></i>{{ data.info }}</h6>
+            <h6 class="card-text fst-italic" style="color: #D1540A"><i class="bi bi-x"></i>{{ data.info }}<i
+                class="bi bi-hand-index-thumb"></i></h6>
             {% endif %}
-
           </div>
         </div>
+        <div class="modal fade" id="recompraModal" tabindex="-1" aria-labelledby="recompraModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color: #002e40">
+                <h5 class="modal-title" style="color: #c39b56">Detalhes da Recompra</h5> <button type="button"
+                  class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="table-responsive">
+                  <table class="table table-dark">
+                    <thead>
+                      <tr>
+                        <th>Motivo</th>
+                        <th>R$</th>
+                        <th>%</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for table in buyback %}
+                      <tr>
+                        <td>{{table.reason}}</td>
+                        <td>{{table.money|format_brl}}</td>
+                        <td>{{table.percentual}}%</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
       </div>
       {% endfor %}
     </div>
@@ -29,19 +79,19 @@
         <h5 class="fw-light">Concentração devedor comum</h5>
         <div class="d-flex justify-content-evenly">
           {% for data in rank_common_debtor %}
-            <div class="col-auto">
-              <div class="card" style="min-width: 150px;background-color: #002e40">
-                <div class="card-body">
-                  <h6 class="card-text" style="color: #c39b56">{{ data.title }}</h6>
-                  <h3 class="card-title" style="color: #e3e3e3">{{ data.value }}</h3>
-                {% if data.info ==  "Enquadrado"  %}
-                  <h6 class="card-text fst-italic" style="color: #3e9611"><i class="bi bi-check"></i>{{ data.info }}</h6>
+          <div class="col-auto">
+            <div class="card" style="min-width: 150px;background-color: #002e40">
+              <div class="card-body">
+                <h6 class="card-text" style="color: #c39b56">{{ data.title }}</h6>
+                <h3 class="card-title" style="color: #e3e3e3">{{ data.value }}</h3>
+                {% if data.info == "Enquadrado" %}
+                <h6 class="card-text fst-italic" style="color: #3e9611"><i class="bi bi-check"></i>{{ data.info }}</h6>
                 {% else %}
-                  <h6 class="card-text fst-italic" style="color: #D1540A"><i class="bi bi-x"></i>{{ data.info }}</h6>
+                <h6 class="card-text fst-italic" style="color: #D1540A"><i class="bi bi-x"></i>{{ data.info }}</h6>
                 {% endif %}
-                </div>
               </div>
             </div>
+          </div>
           {% endfor %}
         </div>
         <div class="row my-3 mx-4  justify-content-evenly">
@@ -52,19 +102,19 @@
         <h5 class="fw-light">Concentração devedor especial</h5>
         <div class="row response justify-content-evenly">
           {% for data in rank_special_debtor %}
-            <div class="col-auto">
-              <div class="card" style="min-width: 150px;background-color: #002e40">
-                <div class="card-body">
-                  <h6 class="card-text" style="color: #c39b56">{{ data.title }}</h6>
-                  <h3 class="card-title" style="color: #e3e3e3">{{ data.value }}</h3>
-                {% if data.info ==  "Enquadrado"  %}
-                  <h6 class="card-text fst-italic" style="color: #3e9611"><i class="bi bi-check"></i>{{ data.info }}</h6>
+          <div class="col-auto">
+            <div class="card" style="min-width: 150px;background-color: #002e40">
+              <div class="card-body">
+                <h6 class="card-text" style="color: #c39b56">{{ data.title }}</h6>
+                <h3 class="card-title" style="color: #e3e3e3">{{ data.value }}</h3>
+                {% if data.info == "Enquadrado" %}
+                <h6 class="card-text fst-italic" style="color: #3e9611"><i class="bi bi-check"></i>{{ data.info }}</h6>
                 {% else %}
-                  <h6 class="card-text fst-italic" style="color: #D1540A"><i class="bi bi-x"></i>{{ data.info }}</h6>
+                <h6 class="card-text fst-italic" style="color: #D1540A"><i class="bi bi-x"></i>{{ data.info }}</h6>
                 {% endif %}
-                </div>
               </div>
             </div>
+          </div>
           {% endfor %}
         </div>
         <div class="row my-3 mx-4 justify-content-evenly" id="container_graph">

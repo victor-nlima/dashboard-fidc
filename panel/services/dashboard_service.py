@@ -37,6 +37,7 @@ class DashboardService:
             "data_statistics": data.get("data_statistics"),
             "current_box": data.get("current_box"),
             "cumulative_expected_flow": data.get("cumulative_expected_flow"),
+            "buyback": data.get("buyback")
         }
 
         

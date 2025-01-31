@@ -161,3 +161,27 @@ main{
     }
 
 }
+
+/* dashboard_frame */
+
+.card-hover-effect {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.card-hover-effect:hover {
+    background-color: #004358 !important;
+    transform: translateY(-2px);
+}
+
+.modal-body{
+    background-color: #dbdbdb;
+}
+
+.table{
+    box-shadow: 5px 5px 5px #000;
+}
+
+.modal-header{
+    border: none !important;
+}

@@ -16,7 +16,8 @@ class ValidatorDataInfo:
             'special_debtor_transform': {'type': 'list','required':True },
             'data_statistics': {'type': 'list','required':True },
             'current_box': {'type': 'list','required':True },
-            'cumulative_expected_flow': {'type': 'list', 'required':True}
+            'cumulative_expected_flow': {'type': 'list', 'required':True},
+            'buyback': {'type': 'list', 'required':True}
         }
 
     def validate(self,data):
