@@ -44,7 +44,7 @@ def dashboard_frame(request):
                 debtor['value'] = round(debtor['value'],2)
             else:
                 list[i] = round(debtor, 2)
-
+        
 
     if common_debtor_transform:
         transform_data(common_debtor_transform)
@@ -66,6 +66,10 @@ def dashboard_frame(request):
                 'percentual': sm_percentual 	
             }
         )
+
+        for bb in buyback:
+            bb['money'] = f'R$ {bb['money']:,.2f}'.replace(",", "#").replace(".", ",").replace("#", ".")
+            
 
     return render(request,'dashboard_frame.html',{
         'message':message,

@@ -60,13 +60,13 @@
                       {% if forloop.last %}
                         <tr>
                           <th>{{table.reason}}</th>
-                          <th>{{table.money|format_brl}}</th>
+                          <th>{{table.money}}</th>
                           <th>{{table.percentual|floatformat:2}}%</th>
                         </tr>
                       {% else %}
                         <tr>
                           <td>{{table.reason}}</td>
-                          <td>{{table.money|format_brl}}</td>
+                          <td>{{table.money}}</td>
                           <td>{{table.percentual|floatformat:2}}%</td>
                         </tr>
                       {% endif %}
