@@ -29,7 +29,6 @@ def login(request):
             message = {'success': False, 'message': f'Email ou Senha incorretos'}
 
         
-    message = {'success': True, 'message': f'{request.META}'}
     return render(request,'login.html',{"form":form,'message':message})
 
 def logout_views(request):
