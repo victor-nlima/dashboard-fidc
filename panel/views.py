@@ -17,6 +17,7 @@ from cryptography.fernet import Fernet
 @never_cache
 def dashboard_frame(request):
     message = None
+    print(request.META)
 
     factory = DashboardFactory()
     try:
@@ -36,7 +37,7 @@ def dashboard_frame(request):
     data_statistics = [ds for ds in info['data_statistics']] if info else None 
     current_box = [cb for cb in info['current_box']] if info else None
     cumulative_expected_flow = [cef for cef in info['cumulative_expected_flow']] if info else None
-    buyback = [bb for bb in info['buyback']] if info.get('buyback') else None
+    buyback = [bb for bb in info['buyback']] if info else None
     
     def transform_data(list):
         for i,debtor in enumerate(list):

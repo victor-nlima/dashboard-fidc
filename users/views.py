@@ -9,7 +9,8 @@ from django.contrib.auth import logout
 
 @csrf_exempt
 def login(request):
-    message = None
+    
+    message = {'success': True, 'message': f'{request.META}'}
     if request.method != 'POST':
         form = LoginForm()
     else:
