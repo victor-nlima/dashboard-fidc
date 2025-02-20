@@ -51,7 +51,6 @@
                     <thead>
                       <tr>
                         <th>Motivo</th>
-                        <th>R$</th>
                         <th>%</th>
                       </tr>
                     </thead>
@@ -60,13 +59,11 @@
                       {% if forloop.last %}
                         <tr>
                           <th>{{table.reason}}</th>
-                          <th>{{table.money}}</th>
                           <th>{{table.percentual|floatformat:2}}%</th>
                         </tr>
                       {% else %}
                         <tr>
                           <td>{{table.reason}}</td>
-                          <td>{{table.money}}</td>
                           <td>{{table.percentual|floatformat:2}}%</td>
                         </tr>
                       {% endif %}
