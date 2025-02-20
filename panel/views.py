@@ -69,7 +69,7 @@ def dashboard_frame(request):
         )
 
         for bb in buyback:
-            bb['money'] = f'R$ {bb['money']:,.2f}'.replace(",", "#").replace(".", ",").replace("#", ".")
+            bb['money'] = f'{bb['money']:,.2f}'.replace(",", "#").replace(".", ",").replace("#", ".")
             
 
     return render(request,'dashboard_frame.html',{
