@@ -16,7 +16,7 @@ local_settings.py
 media/
 staticfiles/
 *.sqlite3
-*/migrations/
+_dashboard/settings.py
 
 # Virtual Environment
 .env
