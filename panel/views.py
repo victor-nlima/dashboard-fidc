@@ -17,7 +17,6 @@ from cryptography.fernet import Fernet
 @never_cache
 def dashboard_frame(request):
     message = None
-    print(request.META)
 
     factory = DashboardFactory()
     try:
