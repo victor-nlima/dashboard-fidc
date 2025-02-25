@@ -185,3 +185,7 @@ main{
 .modal-header{
     border: none !important;
 }
+
+.bi{
+    margin-left: 5px;
+}
