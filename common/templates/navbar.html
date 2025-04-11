@@ -20,6 +20,15 @@
     width: 100%;
     margin-right: 5px;
   }
+  .input_filter{
+    padding: 5px;
+    background-color:#bcbcbc;
+    border: none;
+    border-radius: 10px;
+  }
+  .bi-calendar{
+    margin: 0;
+  }
 </style>
 <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark" id="nav_bar">
   <div class="container-fluid">
@@ -32,7 +41,20 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
+      <div class="me-auto d-flex align-items-center ms-3">
+        <form method="get" class="d-flex align-items-center" action="{% url 'dashboard_frame' %}">
+          <input type="text" id="data-filtro" name="date" readonly class="visually-hidden">
+          <button type="button" id="btn-abrir-calendario" class="btn btn-outline-secondary me-2" title="Escolher data">
+            <i class="bi bi-calendar"></i>
+          </button>          
+          <span id="data-selecionada" class="me-3 px-2 py-1 border rounded text-secondary d-flex align-items-center d-none" style="font-size: 0.875rem;">
+            <i class="bi bi-calendar-event me-1"></i>
+            <span id="texto-data"></span>
+          </span>
+          <button type="submit" class="btn btn-primary">Filtrar</button>
+        </form>
+      </div>
+      <ul class="navbar-nav ms-auto">
         {% comment %}
         <!-- segue um exemplo de rendeerizacao para diferentes tipos de usuarios -->
         
@@ -50,17 +72,37 @@
 
         <!-- fim do exemplo -->
         {% endcomment %}
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="{% url 'dashboard_statistics' %}">Estatísticas</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="{% url 'dashboard_frame' %}">Enquadramento</a>
-        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="{% url 'dashboard_frame' %}">Home</a>
+        </li> -->
         <li class="nav-item">
           <a class="nav-link" href="{% url 'logout' %}">Sair</a>
         </li>
       </ul>
+            
     </div>
-  </div>
-  
+  </div>  
 </nav>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  const datasDisponiveis = {{ datas_json|safe }};
+
+  const inputData = document.getElementById("data-filtro");
+  const mostrarData = document.getElementById("data-selecionada");
+  const textoData = document.getElementById("texto-data");
+
+  const calendario = flatpickr(inputData, {
+    enable: datasDisponiveis,
+    dateFormat: "Y-m-d",
+    locale: "pt",
+    onChange: function(selectedDates, dateStr, instance) {
+      textoData.textContent = dateStr;
+      mostrarData.classList.remove("d-none"); // mostra o span
+    }
+  });
+
+  document.getElementById("btn-abrir-calendario").addEventListener("click", () => {
+    calendario.open();
+  });
+
+</script>

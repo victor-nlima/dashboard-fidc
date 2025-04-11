@@ -4,7 +4,40 @@
 
 {% block titulo %}Dashboard{% endblock %}
 {% block conteudo %}
+<h3 class="text-white text-center mt-4">Relatório do dia: {{ date_of_report }}</h3>
 <div class="container-fluid mt-4">
+  <div class="container_title_ywo">
+    <h1 class="card-title" style="color: #e3e3e3">Estatísticas</h1>
+    
+  </div>
+  <div class="row mt-4 justify-content-evenly">
+      {% for data in data_statistics %}
+          <div class="col-auto">
+              <div class="card" style="min-width: 200px;background-color: #002e40">
+                  <div class="card-body">
+                      <h5 class="card-text" style="color: #c39b56">{{ data.title }}</h5>
+                      <h2 class="card-title" style="color: #e3e3e3">{{ data.value }}</h2>
+                      <h6 class="card-text fst-italic" style="color: #ababab">{{ data.info }}</h6>
+                  </div>
+              </div>
+          </div>
+      {% endfor %}
+  </div>
+  <div class="container_flow">
+      <div class="container_flow_canvas">
+          <h5>Fluxo de caixa esperado</h5>
+          <div id="fluxo_caixa" style="width: 100%; height: 300px;"></div>
+      </div>
+  </div>
+  <div class="container_title">
+    <h1 class="card-title" style="color: #e3e3e3"></h1>
+  </div>
+</div>
+
+<div class="container-fluid mt-4">
+  <div class="container_title_two">
+    <h1 class="card-title" style="color: #e3e3e3">Enquadramento</h1>
+  </div>
   <div class="row">
     <div class="row  justify-content-evenly container_statistics">
       {% for data in data_frame %}
@@ -135,13 +168,24 @@
 {{ common_debtor_transform|json_script:"common_debtor_transform" }}
 {{ special_debtor|json_script:"special_debtor" }}
 {{ special_debtor_transform|json_script:"special_debtor_transform" }}
-
 <script src="{% static 'js/frame.js' %}"></script>
+{{ current_box|json_script:"current_box" }}
+{{ cumulative_expected_flow|json_script:"cumulative_expected_flow" }}
+<script src="{% static 'js/statistics.js' %}" ></script>
 
 <!-- Exemplo de como passar as variaveis que veeem pela views para o javascript externo  -->
 <!-- o arquivo javascript externo está importado na base.html -->
-
-
 <!-- algumas estilizacoes foram feitas nos arquivos css externo -->
+<style>
+  .container_title{
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.264);
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  .container_title_two{
+    margin-bottom: 25px;
+  }
+</style>
 
 {% endblock %}

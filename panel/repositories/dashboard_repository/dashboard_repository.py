@@ -19,6 +19,17 @@ class DashboardRepository(AbstractDashboardRepository):
     def get_date(self):
         dash = DataDashboard.objects.all().order_by('-creation_date').first()
         return self._to_dto(dash) if dash else None
+    
+    def get_filter_date(self,date):
+        dash = DataDashboard.objects.filter(creation_date = date).first()
+        return self._to_dto(dash) if dash else None
+
+    def get_all_data(self):
+        dash = DataDashboard.objects.all().order_by('-creation_date')
+        if not dash:
+            return None
+        
+        return [self._to_dto(dh) for dh in dash ]
 
     def create_data(self,data) -> bool:
         try:

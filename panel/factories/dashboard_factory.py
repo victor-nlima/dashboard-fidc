@@ -20,3 +20,13 @@ class DashboardFactory:
         dashboardService = DashboardService(self.dashboardRepository)
         response = dashboardService.delete_last_data()
         return response
+
+    def execute_get_all_data(self):
+        dashboardService = DashboardService(self.dashboardRepository)
+        response = dashboardService.get_all_data()
+        return response
+    
+    def execute_get_filter_date(self,date):
+        dashboardService = DashboardService(self.dashboardRepository)
+        response = dashboardService.get_filter_dashboard_date(date)
+        return response

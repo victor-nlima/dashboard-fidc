@@ -17,15 +17,43 @@ from cryptography.fernet import Fernet
 @never_cache
 def dashboard_frame(request):
     message = None
-
     factory = DashboardFactory()
+   
+    date_url = request.GET.get('date')
+    if date_url:
+        
+        try:
+            dashboard_data = factory.execute_get_filter_date(date_url)
+            date_of_report = dashboard_data.creation_date
+            info = dashboard_data.info
+        except Exception as e:
+            print(f'Error: {e}')
+            message = {'success':False,"message":'Nenhum dado encontrado'}
+            info = None
+    else:
+        try:
+            dashboard_data = factory.execute_get_dashboard_data()
+            date_of_report = dashboard_data.creation_date
+            info = dashboard_data.info
+        except Exception as e:
+            print(f'Error: {e}')
+            message = {'success':False,"message":'Nenhum dado encontrado'}
+            info = None
+
     try:
-        dashboard_data = factory.execute_get_dashboard_data()
-        info = dashboard_data.info
+        date = factory.execute_get_all_data()
+        date_filter = []
+        for dt in date:            
+            date_filter.append(str(dt.creation_date))
+
     except Exception as e:
-        message = {'success':False,"message":'Nenhum dado encontrado'}
-        info = None
+        message = {'success':False,"message":'Datas não encontradas.'}
     
+    try:
+        date_of_report = date_of_report.strftime("%d/%m/%Y")
+    except Exception as e:
+        print(f"Erro date of report {e}")
+        
     data_frame = [frame for frame in info['data_frame']] if info else None
     rank_common_debtor = [rank for rank in info['rank_common_debtor']] if info else None
     rank_special_debtor = [rank for rank in info['rank_special_debtor']] if info else None
@@ -45,7 +73,6 @@ def dashboard_frame(request):
             else:
                 list[i] = round(debtor, 2)
         
-
     if common_debtor_transform:
         transform_data(common_debtor_transform)
     
@@ -83,8 +110,10 @@ def dashboard_frame(request):
         'data_statistics':data_statistics,
         'current_box':current_box,
         'cumulative_expected_flow':cumulative_expected_flow,
-        'buyback': buyback
-})
+        'buyback': buyback,
+        'datas_json': json.dumps(date_filter),
+        "date_of_report":date_of_report
+    })
 
 
 @login_required(login_url='login')
@@ -98,18 +127,18 @@ def dashboard_statistics(request):
         dashboard_data = factory.execute_get_dashboard_data()
         info = dashboard_data.info
     except Exception as e:
-        message = {'success':False,"message":'Nenhum dado encontrado'}
+        message = {'success':False,"message":'Nenhum dado encontrado.'}
         info = None
 
     data_statistics = [ds for ds in info['data_statistics']] if info else None
-    current_box = [cb for cb in info['current_box']] if info else None
-    cumulative_expected_flow = [cef for cef in info['cumulative_expected_flow']] if info else None
+    current_box_statistics = [cb for cb in info['current_box']] if info else None
+    cumulative_expected_flow_statistics = [cef for cef in info['cumulative_expected_flow']] if info else None
 
     return render(request,'dashboard_statistics.html',{
         'message':message,
         "data_statistics": data_statistics,
-        "current_box": current_box,
-        "cumulative_expected_flow": cumulative_expected_flow,
+        "current_box_statistics": current_box_statistics,
+        "cumulative_expected_flow_statistics": cumulative_expected_flow_statistics,
     })
 
 @csrf_exempt

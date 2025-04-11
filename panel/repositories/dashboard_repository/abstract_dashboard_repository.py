@@ -23,3 +23,11 @@ class AbstractDashboardRepository(ABC):
     @abstractmethod
     def delete_last_date(self):
         pass
+
+    @abstractmethod
+    def get_filter_date(self):
+        pass
+
+    @abstractmethod
+    def get_all_data(self):
+        pass

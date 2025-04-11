@@ -19,9 +19,38 @@ class DashboardService:
 
         return dash
     
+    def get_filter_dashboard_date(self,date) -> Optional[DashboardDTO]:
+        
+        dash = self.dashboardRepository.get_all_data()
+        dash_filter = None
+        
+        if not dash:
+            print('Dados do dashboard não enconotrados.')
+            return None
+
+        for dh in dash:
+            date_dash = dh.creation_date.strftime("%Y-%m-%d")
+            date_dash = datetime.strptime(date_dash,"%Y-%m-%d")
+            date_analysis = datetime.strptime(date,"%Y-%m-%d")
+            if date_analysis == date_dash:
+                dash_filter = dh
+                break
+
+        if not dash_filter:
+            print('Dados do dashboard não enconotrados.')
+            return None        
+        print("Cheguei aqui ", dash_filter)
+        return dash_filter
+    
+    def get_all_data(self):
+        dash = self.dashboardRepository.get_all_data()
+    
+        if not dash:
+            return False
+        
+        return dash
+    
     def create_dashboard(self,data):
-        
-        
 
         info={
             "data_frame" : data.get('data_frame'),
