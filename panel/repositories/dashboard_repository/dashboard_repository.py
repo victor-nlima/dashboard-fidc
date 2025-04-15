@@ -9,6 +9,7 @@ class DashboardRepository(AbstractDashboardRepository):
         return DashboardDTO(
             id = dashboard.id,
             creation_date = dashboard.creation_date,
+            ref_date=dashboard.ref_date,
             info = dashboard.info
         )
 
@@ -21,9 +22,12 @@ class DashboardRepository(AbstractDashboardRepository):
         return self._to_dto(dash) if dash else None
     
     def get_filter_date(self,date):
-        dash = DataDashboard.objects.filter(creation_date = date).first()
-        return self._to_dto(dash) if dash else None
-
+        try:
+            dash = DataDashboard.objects.filter(ref_date = date).first()
+            return self._to_dto(dash) if dash else False
+        except:
+            return False
+        
     def get_all_data(self):
         dash = DataDashboard.objects.all().order_by('-creation_date')
         if not dash:
@@ -31,14 +35,13 @@ class DashboardRepository(AbstractDashboardRepository):
         
         return [self._to_dto(dh) for dh in dash ]
 
-    def create_data(self,data) -> bool:
+    def create_data(self,data,ref_date) -> bool:
         try:
             
             dataDashboard = DataDashboard(
+                ref_date = ref_date,
                 info = data
-            )
-
-            
+            )          
             
             dataDashboard.save()
             return True

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from datetime import datetime
 
 """
     Esta tabela será usada para armazenar os dados por id do usuario. 
@@ -12,7 +13,8 @@ import uuid
 class DataDashboard(models.Model):
 
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-    creation_date = models.DateTimeField(auto_now=True)
+    creation_date = models.DateTimeField(default=datetime.now)
+    ref_date = models.DateTimeField(blank=True, null=True) 
     info =models.JSONField()
 
     def __str__(self):

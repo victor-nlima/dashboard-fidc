@@ -26,20 +26,21 @@ class DashboardService:
         
         if not dash:
             print('Dados do dashboard não enconotrados.')
-            return None
+            return False
 
         for dh in dash:
-            date_dash = dh.creation_date.strftime("%Y-%m-%d")
-            date_dash = datetime.strptime(date_dash,"%Y-%m-%d")
-            date_analysis = datetime.strptime(date,"%Y-%m-%d")
-            if date_analysis == date_dash:
-                dash_filter = dh
-                break
+            if  dh.ref_date:
+                date_dash = dh.ref_date.strftime("%Y-%m-%d")
+                date_dash = datetime.strptime(date_dash,"%Y-%m-%d")
+                date_analysis = datetime.strptime(date,"%Y-%m-%d")
+                if date_analysis == date_dash:
+                    dash_filter = dh
+                    break
 
         if not dash_filter:
             print('Dados do dashboard não enconotrados.')
-            return None        
-        print("Cheguei aqui ", dash_filter)
+            return None
+               
         return dash_filter
     
     def get_all_data(self):
@@ -69,16 +70,26 @@ class DashboardService:
             "buyback": data.get("buyback")
         }
 
+        ref_date = data.get("data_do_relatorio",None)
+        
+        if ref_date:
+            del data['data_do_relatorio']
+            ref_date = datetime.strptime(ref_date,"%Y-%m-%d")
+        else:
+            return_default = ReturnDefault(success=False,message="O dado está sem data de referência e não será indexado no sistema. Adicione o campo data_do_relatorio no json.")
+            return return_default.to_dict()
+
         
         validator = ValidatorDataInfo()
         verify = validator.validate(info)
-                 
+        
+        print(datetime.now())
 
         if verify.get('error'):
             return_default = ReturnDefault(success=False,message=verify)
             return return_default.to_dict()
         
-        if self.dashboardRepository.create_data(info):
+        if self.dashboardRepository.create_data(info,ref_date):
             return_default = ReturnDefault(success=True,message='Data registered successfully')
             return return_default.to_dict()
         else:

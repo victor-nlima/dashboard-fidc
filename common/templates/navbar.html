@@ -54,6 +54,11 @@
           <button type="submit" class="btn btn-primary">Filtrar</button>
         </form>
       </div>
+      <div style="color: aliceblue;">
+        {% if request.user.is_superuser %}
+         <a class="btn btn-outline-secondary me-4" href="/admin">Painel Admin</a>
+        {% endif %}
+      </div>
       <ul class="navbar-nav ms-auto">
         {% comment %}
         <!-- segue um exemplo de rendeerizacao para diferentes tipos de usuarios -->
