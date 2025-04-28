@@ -4,6 +4,7 @@ from .abstract_dashboard_repository import AbstractDashboardRepository
 from common.models import DataDashboard 
 from django.contrib.auth.models import User
 
+
 class DashboardRepository(AbstractDashboardRepository):
     def _to_dto(self, dashboard: DataDashboard) -> DashboardDTO:
         return DashboardDTO(
@@ -18,7 +19,7 @@ class DashboardRepository(AbstractDashboardRepository):
     #     return self._to_dto(dash) if dash else None
 
     def get_date(self):
-        dash = DataDashboard.objects.all().order_by('-creation_date').first()
+        dash = DataDashboard.objects.all().exclude(ref_date__isnull=True).order_by('-ref_date','-creation_date').first()
         return self._to_dto(dash) if dash else None
     
     def get_filter_date(self,date):
