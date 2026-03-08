@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'common',
     'axes',
     'api',
+    'rest_framework',
+    'rest_framework_simplejwt',
 ]
         
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -65,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'axes.middleware.AxesMiddleware',
+    'api.middleware.log_middleware.APILogMiddleware'
 ]
 
 ADMIN_ONLY_SUPERUSER = True
@@ -97,6 +100,13 @@ TEMPLATES = [
         },
     },
 ]
+
+# REST_FRAMEWORK JWT config
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
 
 # LOGGING configuration for API access
 import logging

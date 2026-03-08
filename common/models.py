@@ -10,12 +10,23 @@ from datetime import datetime
 
 """
 
-class DataDashboard(models.Model):
 
-    id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
+class DataDashboard(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     creation_date = models.DateTimeField(default=datetime.now)
-    ref_date = models.DateTimeField(blank=True, null=True) 
-    info =models.JSONField()
+    ref_date = models.DateTimeField(blank=True, null=True)
+    info = models.JSONField()
 
     def __str__(self):
         return f"{self.creation_date}"
+
+
+# PositionHistory model
+class PositionHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    creation_date = models.DateTimeField(default=datetime.now)
+    ref_date = models.DateTimeField(blank=True, null=True)
+    data = models.JSONField()
+
+    def __str__(self):
+        return f"{self.user.username} - {self.ref_date}"
