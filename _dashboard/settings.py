@@ -44,9 +44,10 @@ INSTALLED_APPS = [
     'users',
     'panel',
     'common',
-    'axes'
+    'axes',
+    'api',
 ]
-
+        
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 SESSION_COOKIE_AGE = 3600
@@ -96,6 +97,37 @@ TEMPLATES = [
         },
     },
 ]
+
+# LOGGING configuration for API access
+import logging
+import logging.handlers
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
+        },
+    },
+    'handlers': {
+        'file_api': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'api_access.log'),
+            'maxBytes': 5 * 1024 * 1024,
+            'backupCount': 3,
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'api_logger': {
+            'handlers': ['file_api'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
 
 WSGI_APPLICATION = '_dashboard.wsgi.application'
 
