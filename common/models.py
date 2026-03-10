@@ -20,6 +20,52 @@ class DataDashboard(models.Model):
     def __str__(self):
         return f"{self.creation_date}"
 
-
-class StockOfCreditRights(models.Model):
+# Modelo de Fundo
+class Fund(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255)
+    cnpj = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+# Liga Fundo à Instituição (Group)
+class FundAccess(models.Model):
+    fund = models.ForeignKey(Fund, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.fund.name} - {self.group.name}"
+
+# Tabelas de Dados
+class CreditStock(models.Model):
+    fund = models.ForeignKey(Fund, on_delete=models.CASCADE)
+    data = models.JSONField()
+    ref_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.fund.name} - {self.ref_date}"
+
+class TransactionHistory(models.Model):
+    fund = models.ForeignKey(Fund, on_delete=models.CASCADE)
+    data = models.JSONField()
+    ref_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.fund.name} - {self.ref_date}"
+
+class CashFlow(models.Model):
+    fund = models.ForeignKey(Fund, on_delete=models.CASCADE)
+    data = models.JSONField()
+    ref_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.fund.name} - {self.ref_date}"

@@ -1,8 +1,17 @@
 from rest_framework import serializers
-from common.models import PositionHistory
+from common.models import CreditStock, TransactionHistory, CashFlow
 
-# Serializer básico para PositionHistory, incluindo todos os campos do model
-class PositionHistorySerializer(serializers.ModelSerializer):
+class CreditStockSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PositionHistory
+        model = CreditStock
+        fields = '__all__'
+
+class TransactionHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TransactionHistory
+        fields = '__all__'
+
+class CashFlowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CashFlow
         fields = '__all__'

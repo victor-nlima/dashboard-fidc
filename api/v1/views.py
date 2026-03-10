@@ -5,30 +5,64 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
-from common.models import PositionHistory
-from .serializers import PositionHistorySerializer
+from common.models import Fund, FundAccess, CreditStock, TransactionHistory, CashFlow
+from .serializers import CreditStockSerializer, TransactionHistorySerializer, CashFlowSerializer
+from django.contrib.auth.models import Group
+import re
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def create_position(request):
-    if not request.user.is_superuser:
-        return Response({'detail': 'Permissão negada.'}, status=status.HTTP_403_FORBIDDEN)
-    serializer = PositionHistorySerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(user=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# Utilitário para checar acesso ao fundo
+
+def user_has_fund_access(user, fund):
+    if user.is_superuser:
+        return True
+    user_groups = user.groups.all()
+    return FundAccess.objects.filter(fund=fund, group__in=user_groups).exists()
+
+def clean_cnpj(cnpj):
+    return re.sub(r'\D', '', cnpj)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def list_positions(request):
-    date = request.GET.get('date')
-    if request.user.is_superuser:
-        queryset = PositionHistory.objects.all()
-    else:
-        queryset = PositionHistory.objects.filter(group__in=request.user.groups.all())
-    if date:
-        queryset = queryset.filter(ref_date=date)
-    queryset = queryset.order_by('-creation_date').first()
-    serializer = PositionHistorySerializer(queryset)
+def list_credit_stock(request, cnpj):
+    cnpj_clean = clean_cnpj(cnpj)
+    try:
+        fund = Fund.objects.get(cnpj=cnpj_clean)
+    except Fund.DoesNotExist:
+        return Response({'detail': 'Fund not found.'}, status=404)
+    if not user_has_fund_access(request.user, fund):
+        return Response({'detail': 'Access denied.'}, status=403)
+    queryset = CreditStock.objects.filter(fund=fund)
+    serializer = CreditStockSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def list_transaction_history(request, cnpj):
+    cnpj_clean = clean_cnpj(cnpj)
+    try:
+        fund = Fund.objects.get(cnpj=cnpj_clean)
+    except Fund.DoesNotExist:
+        return Response({'detail': 'Fund not found.'}, status=404)
+    if not user_has_fund_access(request.user, fund):
+        return Response({'detail': 'Access denied.'}, status=403)
+    queryset = TransactionHistory.objects.filter(fund=fund)
+    serializer = TransactionHistorySerializer(queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def list_cash_flow(request, cnpj):
+    cnpj_clean = clean_cnpj(cnpj)
+    try:
+        fund = Fund.objects.get(cnpj=cnpj_clean)
+    except Fund.DoesNotExist:
+        return Response({'detail': 'Fund not found.'}, status=404)
+    # Check de Instituição
+    if not user_has_fund_access(request.user, fund):
+        return Response({'detail': 'Access denied.'}, status=403)
+    # Check de Setor
+    if not request.user.is_superuser and not request.user.has_perm('common.view_cashflow'):
+        return Response({'detail': 'Permission denied for CashFlow.'}, status=403)
+    queryset = CashFlow.objects.filter(fund=fund)
+    serializer = CashFlowSerializer(queryset, many=True)
     return Response(serializer.data)
