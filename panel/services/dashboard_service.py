@@ -83,7 +83,6 @@ class DashboardService:
         validator = ValidatorDataInfo()
         verify = validator.validate(info)
         
-        print(datetime.now())
 
         if verify.get('error'):
             return_default = ReturnDefault(success=False,message=verify)

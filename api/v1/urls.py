@@ -1,7 +1,8 @@
 # urls.py for api v1
 from django.urls import path
-from .views import TestAPIView
+from . import views
 
 urlpatterns = [
-    path('teste/', TestAPIView.as_view(), name='api_v1_teste'),
+    path('create/', views.create_position, name='api_create_position'),
+    path('list/', views.list_positions, name='api_list_positions'),
 ]
