@@ -206,7 +206,6 @@ python-socks==2.8.0
 pytz==2024.2
 pyvis==0.3.2
 pyvista==0.47.0
-pywin32==311
 PyYAML==6.0.3
 redis==7.1.0
 referencing==0.37.0
