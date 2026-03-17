@@ -42,7 +42,7 @@ Thumbs.db
 .pytest_cache/
 
 # Migrations
-migrations/**/000*.py
+common/migrations/**
 
 # MyPy
 .mypy_cache/
