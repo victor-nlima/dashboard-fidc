@@ -1,6 +1,5 @@
-# log_middleware.py for api
-
 import logging
+
 
 class APILogMiddleware:
     def __init__(self, get_response):

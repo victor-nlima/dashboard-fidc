@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+from datetime import timedelta
+
 from decouple import config
 from pathlib import Path
 
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_spectacular'
 ]
         
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -67,7 +70,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'axes.middleware.AxesMiddleware',
-    'api.middleware.log_middleware.APILogMiddleware'
+    'api.middleware.log_middleware.APILogMiddleware',
+    'api.middleware.ratelimit_middleware.CustomLoginRateLimitMiddleware',
 ]
 
 ADMIN_ONLY_SUPERUSER = True
@@ -77,7 +81,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Backend padrão do Django
 ]
 
-AXES_FAILURE_LIMIT = 5  # Número de tentativas falhadas antes de bloquear o login
+AXES_FAILURE_LIMIT = 20  # Número de tentativas falhadas antes de bloquear o login
 AXES_COOLOFF_TIME = 1  # Tempo de espera antes de permitir novas tentativas (em horas)
 AXES_LOCKOUT_TEMPLATE = 'locked.html'  # Template customizado para página de bloqueio (opcional)
 AXES_RESET_ON_SUCCESS = True
@@ -103,9 +107,49 @@ TEMPLATES = [
 
 # REST_FRAMEWORK JWT config
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
+}
+
+# DOCUMENTACAO
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Maud Capital - API Dashboard FIDC',
+    'DESCRIPTION': 'Documentação das rotas de integração e consulta de dados dos fundos.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'COMPONENT_SPLIT_PATCH': True,
+    'COMPONENT_SPLIT_REQUEST': True,
+    'SECURITY': [{
+        'jwtAuth': []
+    }],
+    'APPEND_COMPONENTS': {
+        'securitySchemes': {
+            'jwtAuth': {
+                'type': 'http',
+                'scheme': 'bearer',
+                'bearerFormat': 'JWT',
+            }
+        }
+    },
+}
+
+SIMPLE_JWT = {
+    # Tempo de vida do Access Token (o que você usa no Header Authorization)
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1), 
+    
+    # Tempo de vida do Refresh Token (usado para pegar um novo Access sem logar de novo)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    
+    # Se True, ao usar um Refresh Token, você recebe um novo Refresh Token (roda a chave)
+    'ROTATE_REFRESH_TOKENS': True,
+    
+    # # Se True, o Refresh Token antigo é colocado na blacklist (precisa de app de blacklist)
+    # 'BLACKLIST_AFTER_ROTATION': True,
+    
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
 # LOGGING configuration for API access
@@ -124,7 +168,7 @@ LOGGING = {
         'file_api': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'api_access.log'),
+            'filename': os.path.join(BASE_DIR, 'logs','api_access.log'),
             'maxBytes': 5 * 1024 * 1024,
             'backupCount': 3,
             'formatter': 'verbose',

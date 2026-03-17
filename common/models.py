@@ -10,7 +10,6 @@ from datetime import datetime
 
 """
 
-
 class DataDashboard(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     creation_date = models.DateTimeField(default=datetime.now)
@@ -20,7 +19,6 @@ class DataDashboard(models.Model):
     def __str__(self):
         return f"{self.creation_date}"
 
-# Modelo de Fundo
 class Fund(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
@@ -33,6 +31,7 @@ class Fund(models.Model):
 
 # Liga Fundo à Instituição (Group)
 class FundAccess(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     fund = models.ForeignKey(Fund, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
 
@@ -41,6 +40,7 @@ class FundAccess(models.Model):
 
 # Tabelas de Dados
 class CreditStock(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     fund = models.ForeignKey(Fund, on_delete=models.CASCADE)
     data = models.JSONField()
     ref_date = models.DateField()
@@ -51,6 +51,7 @@ class CreditStock(models.Model):
         return f"{self.fund.name} - {self.ref_date}"
 
 class TransactionHistory(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     fund = models.ForeignKey(Fund, on_delete=models.CASCADE)
     data = models.JSONField()
     ref_date = models.DateField()
@@ -61,6 +62,7 @@ class TransactionHistory(models.Model):
         return f"{self.fund.name} - {self.ref_date}"
 
 class CashFlow(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     fund = models.ForeignKey(Fund, on_delete=models.CASCADE)
     data = models.JSONField()
     ref_date = models.DateField()
@@ -69,3 +71,25 @@ class CashFlow(models.Model):
 
     def __str__(self):
         return f"{self.fund.name} - {self.ref_date}"
+
+# Novo modelo FundLiability
+class FundLiability(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    fund = models.ForeignKey(Fund, on_delete=models.CASCADE)
+    data = models.JSONField()
+    ref_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.fund.name} - {self.ref_date}"
+ 
+class LoginAttempt(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    ip_address = models.GenericIPAddressField()
+    attempts = models.IntegerField(default=0)
+    last_attempt = models.DateTimeField(auto_now=True)
+    blocked_until = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.ip_address} - Tentativas: {self.attempts}"

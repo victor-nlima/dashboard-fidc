@@ -6,6 +6,11 @@ from django.contrib.auth import login as auth_login
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import logout
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.exceptions import AuthenticationFailed
+from common.models import LoginAttempt
+from django.utils import timezone
+from datetime import timedelta
 
 @csrf_exempt
 def login(request):
@@ -37,3 +42,24 @@ def logout_views(request):
     request.session.flush()
     
     return redirect('login')
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        ip = self.get_client_ip(request)
+        attempt, _ = LoginAttempt.objects.get_or_create(ip_address=ip)
+        try:
+            response = super().post(request, *args, **kwargs)
+            attempt.attempts = 0
+            attempt.blocked_until = None
+            attempt.save()
+            return response
+        
+        except Exception:
+            attempt.attempts += 1
+            if attempt.attempts >= 10:
+                attempt.blocked_until = timezone.now() + timedelta(hours=1)
+            attempt.save()
+            raise AuthenticationFailed("Usuário ou senha inválidos.")
+
+    def get_client_ip(self, request):
+        return request.META.get('REMOTE_ADDR')
