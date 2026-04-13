@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.views.decorators.csrf import csrf_protect,csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from .forms import LoginForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
@@ -10,9 +10,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.exceptions import AuthenticationFailed
 from common.models import LoginAttempt
 from django.utils import timezone
+from django.conf import settings
 from datetime import timedelta
 
-@csrf_exempt
+@csrf_protect
 def login(request):
     
     message = None
@@ -62,4 +63,10 @@ class MyTokenObtainPairView(TokenObtainPairView):
             raise AuthenticationFailed("Usuário ou senha inválidos.")
 
     def get_client_ip(self, request):
-        return request.META.get('REMOTE_ADDR')
+        remote_addr = request.META.get('REMOTE_ADDR', '')
+        trusted_proxies = getattr(settings, 'TRUSTED_PROXIES', [])
+        if remote_addr in trusted_proxies:
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', '')
+            if x_forwarded_for:
+                return x_forwarded_for.split(',')[0].strip()
+        return remote_addr

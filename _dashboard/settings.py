@@ -19,12 +19,11 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--y6*xhsbp)752x*ic59yixp9&2ogwom713r@t5u3pg@0eym3is'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -50,6 +49,7 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'drf_spectacular'
 ]
         
@@ -146,8 +146,8 @@ SIMPLE_JWT = {
     # Se True, ao usar um Refresh Token, você recebe um novo Refresh Token (roda a chave)
     'ROTATE_REFRESH_TOKENS': True,
     
-    # # Se True, o Refresh Token antigo é colocado na blacklist (precisa de app de blacklist)
-    # 'BLACKLIST_AFTER_ROTATION': True,
+    # Se True, o Refresh Token antigo é colocado na blacklist (precisa de app de blacklist)
+    'BLACKLIST_AFTER_ROTATION': True,
     
     'AUTH_HEADER_TYPES': ('Bearer',),
 }

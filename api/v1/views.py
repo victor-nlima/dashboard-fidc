@@ -1,6 +1,7 @@
 from common.models import FundLiability
 from datetime import datetime
 import os
+import logging
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -16,6 +17,8 @@ from rest_framework.permissions import IsAdminUser
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
 from django.conf import settings
+
+logger = logging.getLogger('api_logger')
 
 # Parâmetro reutilizável para a Doc
 DATE_REF_PARAM = OpenApiParameter(
@@ -81,8 +84,9 @@ def create_fund_liability(request):
         fund = Fund.objects.get(cnpj=cnpj_clean)
     except Fund.DoesNotExist:
         return Response({'detail': 'Fundo não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response({'detail': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except Exception:
+        logger.exception('Erro ao buscar fundo em create_fund_liability')
+        return Response({'detail': 'Erro interno ao processar a requisição.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # Limite de registros: 15
     qs = FundLiability.objects.filter(fund=fund, ref_date=ref_date).order_by('created_at')
@@ -234,8 +238,9 @@ def create_credit_stock(request):
         fund = Fund.objects.get(cnpj=cnpj_clean)
     except Fund.DoesNotExist:
         return Response({'detail': 'Fundo não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response({'detail': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except Exception:
+        logger.exception('Erro ao buscar fundo em create_credit_stock')
+        return Response({'detail': 'Erro interno ao processar a requisição.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # Limite de registros: 15
     qs = CreditStock.objects.filter(fund=fund, ref_date=ref_date).order_by('created_at')
@@ -269,8 +274,9 @@ def create_cash_flow(request):
         fund = Fund.objects.get(cnpj=cnpj_clean)
     except Fund.DoesNotExist:
         return Response({"detail": f"Fund with CNPJ {cnpj} not found."}, status=404)
-    except Exception as e:
-        return Response({'detail': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except Exception:
+        logger.exception('Erro ao buscar fundo em create_cash_flow')
+        return Response({'detail': 'Erro interno ao processar a requisição.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # Limite de registros: 15
     qs = CashFlow.objects.filter(fund=fund, ref_date=ref_date).order_by('created_at')
@@ -305,8 +311,9 @@ def create_transaction_history(request):
         fund = Fund.objects.get(cnpj=cnpj_clean)
     except Fund.DoesNotExist:
         return Response({"detail": f"Fund with CNPJ {cnpj} not found."}, status=404)
-    except Exception as e:
-        return Response({'detail': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except Exception:
+        logger.exception('Erro ao buscar fundo em create_transaction_history')
+        return Response({'detail': 'Erro interno ao processar a requisição.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     # Limite de registros: 15
     qs = TransactionHistory.objects.filter(fund=fund, ref_date=ref_date).order_by('created_at')
@@ -402,12 +409,16 @@ def get_system_logs(request):
         return Response({"detail": "Arquivo de log não encontrado."}, status=404)
 
     try:
+        limit = int(request.query_params.get('limit', 500))
+        limit = max(1, min(limit, 2000))
         with open(log_path, 'r', encoding='utf-8', errors='replace') as f:
-            lines = f.readlines()
-            
+            lines = f.readlines()[-limit:]
+
         return Response({
             "arquivo": "api_logs.log",
+            "total_retornado": len(lines),
             "conteudo": lines
         })
-    except Exception as e:
-        return Response({"detail": f"Erro ao ler log: {str(e)}"}, status=500)
+    except Exception:
+        logger.exception('Erro ao ler arquivo de log')
+        return Response({"detail": "Erro ao ler o arquivo de log."}, status=500)
