@@ -12,6 +12,7 @@ class CustomLoginRateLimitMiddleware:
         if request.path == '/api/token/' and request.method == 'POST':
             print("="*50)
             print("DEntrod do middleware")
+            
             print("="*50)
             ip = self.get_client_ip(request)
             print(ip)
