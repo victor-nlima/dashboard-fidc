@@ -10,13 +10,7 @@ class CustomLoginRateLimitMiddleware:
 
     def __call__(self, request):
         if request.path == '/api/token/' and request.method == 'POST':
-            print("="*50)
-            print("DEntrod do middleware")
-            
-            print("="*50)
             ip = self.get_client_ip(request)
-            print(ip)
-            print("="*50)
             attempt, created = LoginAttempt.objects.get_or_create(ip_address=ip)
 
             if attempt.blocked_until and attempt.blocked_until > timezone.now():
