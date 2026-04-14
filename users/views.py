@@ -46,16 +46,23 @@ def logout_views(request):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
+        print("="*50)
+        print("DEntrod dA VIEW")
+        print("="*50)
         ip = self.get_client_ip(request)
+        print(ip)
+        print("="*50)
         attempt, _ = LoginAttempt.objects.get_or_create(ip_address=ip)
         try:
             response = super().post(request, *args, **kwargs)
+            print("Validar requisicao")
             attempt.attempts = 0
             attempt.blocked_until = None
             attempt.save()
             return response
         
         except Exception:
+            print("Erro na autenticação")
             attempt.attempts += 1
             if attempt.attempts >= 10:
                 attempt.blocked_until = timezone.now() + timedelta(hours=1)
